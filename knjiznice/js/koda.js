@@ -69,7 +69,7 @@ function generirajPodatke(stPacienta) {
 	                    $("#preberiEHRid").val(ehrId);
 	                    
 	                    //////dodaj meritve
-						var datumInUra = "2014-04-04T08:55";
+						var datumInUra = "2015-04-04T08:55";
 						var telesnaVisina = "185";
 						var telesnaTeza = "120";
 						var telesnaTemperatura = "36.4";
@@ -162,7 +162,7 @@ function generirajPodatke(stPacienta) {
 	                    $("#preberiEHRid").val(ehrId);
 	                    
 	                    //////
-						var datumInUra = "2014-12-07T12:30";
+						var datumInUra = "2016-12-07T12:30";
 						var telesnaVisina = "180";
 						var telesnaTeza = "55";
 						var telesnaTemperatura = "36.5";
@@ -254,7 +254,7 @@ function generirajPodatke(stPacienta) {
 	                    $("#preberiEHRid").val(ehrId);
 	                    
 	                    //////
-						var datumInUra = "2014-03-03T08:15";
+						var datumInUra = "2016-05-05T08:15";
 						var telesnaVisina = "193";
 						var telesnaTeza = "83";
 						var telesnaTemperatura = "38.4";

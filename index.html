@@ -40,9 +40,14 @@
   <!-- ZAČETEK: Vsebina aplikacije -->
   <div class="container">
     <div class="row">
-      <div class="col-lg-12 text-center">
+      <!--<div class="col-lg-12 text-center">
         <p class="lead"><strong>TO-DO</strong>: Na tem mestu implementirajte vašo aplikacijo.</p>
-      </div>
+      </div>-->
+      <div class="col-lg-8 col-md-8 col-sm-8"><b>Generiraj EHR zapis</b> uporabnika</div>
+      <div class="col-lg-8 col-md-8 col-sm-8"><select class="form-control input-sm" id="generirajEHR"  onChange="izberiGeneriranegaUporabnika()"><option value=""></option><option value="1">Uporabnik 1</option><option value="2">Uporabnik 2</option><option value="3">Uporabnik 3</option></select></div>
+      <span class="label label-default">EHR ID</span><input id="preberiEHRidEHR" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
+	          <button type="button" class="btn btn-primary btn-xs" onclick="preberiEHROdUporabnika()">Preberi osnovne podatke o uporabniku</button><span id="preberiSporociloEHR">
+      </span>   
     </div>
     
     
@@ -51,16 +56,12 @@
       <div class="col-md-3">
         <div class="panel-heading">
 		      <!--<div class="row">-->
-			      <div class="col-lg-8 col-md-8 col-sm-8"><b>Generiraj EHR zapis</b> uporabnika</div>
 	          <!--<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control input-sm" id="preberiObstojeciEHREHR"><option value=""></option><option value="254f791d-2e7c-49d9-b646-376f62d6ead5">Dejan Lavbič</option><option value="d564c6a3-5a43-4fcc-bfa7-9ac76e9673bd">Pujsa Pepa</option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02">Ata Smrk</option></select></div>-->
-	          <div class="col-lg-8 col-md-8 col-sm-8"><select class="form-control input-sm" id="generirajEHR"  onChange="izberiGeneriranegaUporabnika()"><option value=""></option><option value="1">Uporabnik 1</option><option value="2">Uporabnik 2</option><option value="3">Uporabnik 3</option></select></div>
 	        <!--</div>-->
 	      </div>
 	      
     	  <div class="panel-body">
-	        <span class="label label-default">EHR ID</span><input id="preberiEHRidEHR" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
-	          <button type="button" class="btn btn-primary btn-xs" onclick="preberiEHROdUporabnika()">Preberi osnovne podatke o uporabniku</button><span id="preberiSporociloEHR">
-          </span>
+	        
 	      </div>
         
         <!--<div class="patient-pic" style="background-image: url('img/Body.jpeg');" alt="Patient"></div>-->

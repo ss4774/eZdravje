@@ -3,6 +3,10 @@
     border: 1px solid #e3e3e3;
 }
 
+.row_spacer{
+    padding: 10px;    
+}
+
 .patient-outline-image{
     height: 222px;
     background-image: url("../img/Body Outline.png");

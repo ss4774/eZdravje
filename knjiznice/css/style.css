@@ -12,3 +12,7 @@
     background-image: url("../img/Body Outline.png");
     background-size: 100%;
 }
+
+#EHRIDInputHolder{
+    float: right;
+}

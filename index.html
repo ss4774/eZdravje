@@ -50,7 +50,7 @@
       <div class="col-lg-2 col-md-2 col-sm-2">
           <div class="panel-body"><select class="form-control input-sm" id="generirajEHR"  onChange="izberiGeneriranegaUporabnika()"><option value=""></option><option value="1">Uporabnik 1</option><option value="2">Uporabnik 2</option><option value="3">Uporabnik 3</option></select></div>
       </div>
-      <div class="col-lg-4 col-md-4 col-sm-4">
+      <div class="col-lg-4 col-md-4 col-sm-4" id="EHRIDInputHolder">
         <span class="label label-default">EHR ID</span><input id="preberiEHRidEHR" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
   	          <button type="button" class="btn btn-primary btn-xs" onclick="preberiEHROdUporabnika()">Preberi osnovne podatke o uporabniku</button><span id="preberiSporociloEHR">
         </span>   
@@ -154,13 +154,13 @@
                   </div>
                     <hr>
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                         <p>Pulse:</p>
                                         <div id="patient-pulse"></div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <div class="progress">
                                     	<div id="progress-pulse">
                                         <!--<div class="progress-bar progress-bar-success bar-spo2"></div>-->
@@ -172,13 +172,13 @@
                     </div>
                     
                     <div class="row">
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                         <p>Body Temperature:</p>
                                         <div id="patient-temp"></div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-8">
                                     <div class="progress">
                                     	<div id="progress-temp">
                                         <!--<div class="progress-bar progress-bar-success bar-spo2"></div>-->

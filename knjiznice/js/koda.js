@@ -137,7 +137,7 @@ function generirajPodatke(stPacienta) {
 
 // TODO: Tukaj implementirate funkcionalnost, ki jo podpira vaša aplikacija
 function izberiGeneriranegaUporabnika(){
-    var uporabnik = $("#generirajEHR").val();
+    var uporabnik = parseInt($("#generirajEHR").val());
     
     var ehrID = generirajPodatke(uporabnik);
     $("#preberiEHRidEHR").val(ehrID);

@@ -209,19 +209,41 @@ function preberiEHROdUporabnika() {
 		    	$("#preberiMeritveVitalnihZnakovSporocilo").html("<span class='obvestilo label label-danger fade-in'>Napaka '" + JSON.parse(err.responseText).userMessage + "'!");
 				console.log(JSON.parse(err.responseText).userMessage);
 		    }
+		});
+		
+		$.ajax({
+		    url: baseUrl + "/view/" + ehrId + "/" + "weight",
+		    type: 'GET',
+		    headers: {"Ehr-Session": sessionId},
+		    success: function (res) {
+		    	if (res.length > 0) {
+			        temp = res[0].weight;
+			        temp2 = res[0].unit;
+			        $(".patient-weight").html("<button type=\"button\" class=\"C2\" onclick=\"master_deatilWeight()\">" + res[0].weight + " " + res[0].unit + "</button>");
+			       // $(".patient-weight").html("<span class='obvestilo label label-success fade-in'>" + res[0].weight + " " + res[0].unit + "</span>");
+		    	} else {
+		    		$(".patient-weight").html("<span class='obvestilo label label-success fade-in'>" + "Ni podatkov" + "</span>");
+		    	}
+		    },
+		    error: function() {
+		    	$("#preberiMeritveVitalnihZnakovSporocilo").html("<span class='obvestilo label label-danger fade-in'>Napaka '" + JSON.parse(err.responseText).userMessage + "'!");
+				console.log(JSON.parse(err.responseText).userMessage);
+		    }
 		}, function(){
+		    //callback za zaporedje da se BMI pravilno izracuna
 		    	$.ajax({
-        		    url: baseUrl + "/view/" + ehrId + "/" + "weight",
+        		    url: baseUrl + "/view/" + ehrId + "/" + "height",
         		    type: 'GET',
         		    headers: {"Ehr-Session": sessionId},
         		    success: function (res) {
         		    	if (res.length > 0) {
-        			        temp = res[0].weight;
-        			        temp2 = res[0].unit;
-        			        $(".patient-weight").html("<button type=\"button\" class=\"C2\" onclick=\"master_deatilWeight()\">" + res[0].weight + " " + res[0].unit + "</button>");
-        			       // $(".patient-weight").html("<span class='obvestilo label label-success fade-in'>" + res[0].weight + " " + res[0].unit + "</span>");
+        			        //$("#patient-height").html("<span class='obvestilo label label-success fade-in'>" + res[0].height + " " + res[0].unit + "</span>");
+        			        $("#patient-height").html("<button type=\"button\" class=\"C2\" onclick=\"master_deatilHeight()\">" + res[0].height + " " + res[0].unit + "</button>");
+        			        $(".height-placeholder-value").html("<span>" + res[0].height + " " + res[0].unit + "</span>");
+        			        
+        			        $("#patient-bmi").html("<span class='C3'>" + ( temp/(res[0].height/100)^2 ) + " " + temp2 + "/" + "m" + "2" + "</span>");
         		    	} else {
-        		    		$(".patient-weight").html("<span class='obvestilo label label-success fade-in'>" + "Ni podatkov" + "</span>");
+        		    		$("#patient-height").html("<span class='obvestilo label label-success fade-in'>" + "Ni podatkov" + "</span>");
         		    	}
         		    },
         		    error: function() {
@@ -229,27 +251,6 @@ function preberiEHROdUporabnika() {
         				console.log(JSON.parse(err.responseText).userMessage);
         		    }
         		});
-		});
-		
-		$.ajax({
-		    url: baseUrl + "/view/" + ehrId + "/" + "height",
-		    type: 'GET',
-		    headers: {"Ehr-Session": sessionId},
-		    success: function (res) {
-		    	if (res.length > 0) {
-			        //$("#patient-height").html("<span class='obvestilo label label-success fade-in'>" + res[0].height + " " + res[0].unit + "</span>");
-			        $("#patient-height").html("<button type=\"button\" class=\"C2\" onclick=\"master_deatilHeight()\">" + res[0].height + " " + res[0].unit + "</button>");
-			        $(".height-placeholder-value").html("<span>" + res[0].height + " " + res[0].unit + "</span>");
-			        
-			        $("#patient-bmi").html("<span class='C3'>" + ( temp/(res[0].height/100)^2 ) + " " + temp2 + "/" + "m" + "2" + "</span>");
-		    	} else {
-		    		$("#patient-height").html("<span class='obvestilo label label-success fade-in'>" + "Ni podatkov" + "</span>");
-		    	}
-		    },
-		    error: function() {
-		    	$("#preberiMeritveVitalnihZnakovSporocilo").html("<span class='obvestilo label label-danger fade-in'>Napaka '" + JSON.parse(err.responseText).userMessage + "'!");
-				console.log(JSON.parse(err.responseText).userMessage);
-		    }
 		});
 		
 		$.ajax({

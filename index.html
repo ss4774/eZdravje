@@ -43,6 +43,53 @@
         <p class="lead"><strong>TO-DO</strong>: Na tem mestu implementirajte vašo aplikacijo.</p>
       </div>
     </div>
+    
+    <div class="row">
+        <div class="col-md-3">
+            
+            <div class="panel-heading">
+  		<div class="row">
+  			<div class="col-lg-8 col-md-8 col-sm-8"><b>Generiraj EHR zapis</b> bolnika</div>
+  			<!--<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control input-sm" id="preberiObstojeciEHREHR"><option value=""></option><option value="254f791d-2e7c-49d9-b646-376f62d6ead5">Dejan Lavbič</option><option value="d564c6a3-5a43-4fcc-bfa7-9ac76e9673bd">Pujsa Pepa</option><option value="b931580f-2b05-488b-985b-8d9ffb08ad02">Ata Smrk</option></select></div>-->
+  			<div class="col-lg-4 col-md-4 col-sm-4"><select class="form-control input-sm" id="generirajEHR"  onChange="generirajBolnika()"><option value=""></option><option value="Bolnik 1">Bolnik 1</option><option value="Bolnik 2">Bolnik 2</option><option value="Bolnik 3">Bolnik 3</option></select></div>
+  		</div>
+  	</div>
+  	<div class="panel-body">
+  		<span class="label label-default">EHR ID</span><input id="preberiEHRidEHR" type="text" class="form-control input-mini" placeholder="7b661e12-3a98-21ad-c29e-2dc9f5a3d885">
+  		<button type="button" class="btn btn-primary btn-xs" onclick="preberiEHRodBolnikaEHR()">Preberi osnovne podatke o bolniku</button><span id="preberiSporociloEHR"></span>
+    	</div>
+            
+            <div class="patient-pic" style="background-image: url('img/Body.jpeg');" alt="Patient"></div>
+        </div>
+        <div class="col-md-3">
+            <div class="patient-info">
+                <h4 id="patient-name"></h4>
+                <p>Age: <span class="patient-age"></span></p>
+                <!--<p>Gender: <span id="patient-gender"></span></p>-->
+                <p>DOB: <span id="patient-dob"></span></p>
+                <!--<p>Address: <span> - </span></p>-->
+                <p>Height: <span id="patient-height"></span></p>
+                <p>Weight: <span class="patient-weight"></span><span class="patient-weight1"></span></p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="patient-info">
+                <h4 id="patient-problems-info"></h4>
+                <p>Problems: </p>
+                <span id="patient-problems"></span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="ver-spacer left">
+                <div class="mask"></div>
+            </div>
+            <div class="patient-team">
+                <p>Detail:</p>
+                <div id="detail"></div>
+            </div>
+        </div>
+    </div>
+    
   </div>
   <!-- KONEC: Vsebina aplikacije -->
 

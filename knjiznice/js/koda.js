@@ -143,7 +143,7 @@ function izberiGeneriranegaUporabnika(){
     $("#preberiEHRidEHR").val(ehrID);
 }
 
-function preberiEHRodBolnika() {
+function preberiEHROdBolnika() {
 	sessionId = getSessionId();
 
 	var ehrId = $("#preberiEHRidEHR").val();

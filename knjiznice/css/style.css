@@ -16,3 +16,10 @@
 #EHRIDInputHolder{
     float: right;
 }
+
+#outline_image{
+    position: absolute;
+}
+#height_image{
+    position: relative;
+}

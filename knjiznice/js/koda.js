@@ -136,6 +136,11 @@ function generirajPodatke(stPacienta) {
 
 
 // TODO: Tukaj implementirate funkcionalnost, ki jo podpira vaša aplikacija
+function generirajUporabnike(){
+    generirajPodatke(1);
+    generirajPodatke(2);
+    generirajPodatke(3);
+}
 function izberiGeneriranegaUporabnika(){
     var uporabnik = parseInt($("#generirajEHR").val());
     

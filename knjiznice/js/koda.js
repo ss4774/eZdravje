@@ -8,6 +8,35 @@ var password = "ois4fri";
 //Google API Key
 var googleAPIKey = "AIzaSyA4uzD5gXkxAnl-FSGwfo-BOpzk4au6lvw";
 
+//ready critical komponents
+$(document).ready(function(){
+	var ac = new google.maps.places.Autocomplete(document.getElementById('find_location'));
+	google.maps.event.addListener(ac, 'place_changed', function(){
+	  	var place = ac.getPlace();
+	  	/*console.log(place.formatted_address);
+	  	console.log(place.url);
+	  	console.log(place.geometry.location);*/
+	  	initMap(place.geometry.location.lat(), place.geometry.location.lng(), place.formatted_address);
+	});
+});
+
+function initMap(lat, lng, address) {
+    var mapDiv = document.getElementById('healthcare_map');
+    var map = new google.maps.Map(mapDiv, {
+      center: {lat: lat, lng: lng},
+      location: {lat: lat, lng: lng},
+      zoom: 16
+    });
+    
+    var marker = new google.maps.Marker({
+	    position: {lat: lat, lng: lng},
+	    map: map,
+	    title: address
+	});
+	marker.setMap(map);
+}
+
+
 /**
  * Prijava v sistem z privzetim uporabnikom za predmet OIS in pridobitev
  * enolične ID številke za dostop do funkcionalnosti
@@ -33,10 +62,10 @@ function getSessionId() {
  * @return ehrId generiranega pacienta
  */
 function generirajPodatke(stPacienta) {
-  ehrId = "";
+  var ehrId = "";
 
   // TODO: Potrebno implementirati
-  sessionId = getSessionId();
+  var sessionId = getSessionId();
   
   
   if(stPacienta == 1){
@@ -72,7 +101,7 @@ function generirajPodatke(stPacienta) {
 	                    
 	                    //////dodaj meritve
 						var datumInUra = "2015-04-04T08:55";
-						var telesnaVisina = "185";
+						var telesnaVisina = "175";
 						var telesnaTeza = "120";
 						var telesnaTemperatura = "36.4";
 						var sistolicniKrvniTlak = "143";
@@ -80,6 +109,58 @@ function generirajPodatke(stPacienta) {
 						var nasicenostKrviSKisikom = "97.9";
 						var merilec = "Dr. Marjan Pip";
 						var pulz = "73";
+					
+						$.ajaxSetup({
+						    headers: {"Ehr-Session": sessionId}
+						});
+						var podatki = {
+							// Preview Structure: https://rest.ehrscape.com/rest/v1/template/Vital%20Signs/example
+						    "ctx/language": "en",
+						    "ctx/territory": "SI",
+						    "ctx/time": datumInUra,
+						    "vital_signs/height_length/any_event/body_height_length": telesnaVisina,
+						    "vital_signs/body_weight/any_event/body_weight": telesnaTeza,
+						   	"vital_signs/body_temperature/any_event/temperature|magnitude": telesnaTemperatura,
+						    "vital_signs/body_temperature/any_event/temperature|unit": "°C",
+						    "vital_signs/blood_pressure/any_event/systolic": sistolicniKrvniTlak,
+						    "vital_signs/blood_pressure/any_event/diastolic": diastolicniKrvniTlak,
+						    "vital_signs/indirect_oximetry:0/spo2|numerator": nasicenostKrviSKisikom,
+						    "vital_signs/pulse:0/any_event:0/rate|magnitude": pulz
+						    //vital_signs/pulse:0/any_event:0/rate|magnitude":83.0,
+						};
+						var parametriZahteve = {
+						    "ehrId": ehrId,
+						    templateId: 'Vital Signs',
+						    format: 'FLAT',
+						    committer: merilec
+						};
+						$.ajax({
+						    url: baseUrl + "/composition?" + $.param(parametriZahteve),
+						    type: 'POST',
+						    contentType: 'application/json',
+						    data: JSON.stringify(podatki),
+						    success: function (res) {
+						    	console.log(res.meta.href);
+						        $("#dodajMeritveVitalnihZnakovSporocilo").html("<span class='obvestilo label label-success fade-in'>" + res.meta.href + ".</span>");
+						    },
+						    error: function(err) {
+						    	$("#dodajMeritveVitalnihZnakovSporocilo").html("<span class='obvestilo label label-danger fade-in'>Napaka '" + JSON.parse(err.responseText).userMessage + "'!");
+								console.log(JSON.parse(err.responseText).userMessage);
+						    }
+						});
+						$("#preberiEHRidEHR").val(ehrId);
+						
+	                    //////
+	                    //////dodaj 2. meritve
+						var datumInUra = "2015-05-05T09:35";
+						var telesnaVisina = "186";
+						var telesnaTeza = "125";
+						var telesnaTemperatura = "35.2";
+						var sistolicniKrvniTlak = "155";
+						var diastolicniKrvniTlak = "67";
+						var nasicenostKrviSKisikom = "96.9";
+						var merilec = "Dr. Marjan Pip";
+						var pulz = "71";
 					
 						$.ajaxSetup({
 						    headers: {"Ehr-Session": sessionId}
@@ -326,7 +407,6 @@ function generirajUporabnike(){
     generirajPodatke(1);
     generirajPodatke(2);
     generirajPodatke(3);
-    klicAPI("as");
 }
 function izberiGeneriranegaUporabnika(){
     var uporabnik = parseInt($("#generirajEHR").val());
@@ -336,7 +416,7 @@ function izberiGeneriranegaUporabnika(){
 }
 
 function preberiEHROdUporabnika() {
-	sessionId = getSessionId();
+	var sessionId = getSessionId();
 
 	var ehrId = $("#preberiEHRidEHR").val();
 	
@@ -530,7 +610,7 @@ function preberiEHROdUporabnika() {
 }
 //////////////////////////////////////// MASTER DETAIL FUNKCIJE
 function master_deatilWeight() {
-	sessionId = getSessionId();
+	var sessionId = getSessionId();
 
 	var ehrId = $("#preberiEHRidEHR").val();
 
@@ -592,7 +672,7 @@ function master_deatilWeight() {
 	}	
 }
 function master_deatilHeight() {
-	sessionId = getSessionId();
+	var sessionId = getSessionId();
 
 	var ehrId = $("#preberiEHRidEHR").val();
 
@@ -612,6 +692,9 @@ function master_deatilHeight() {
 		        results += "</table>";
 		        $("#detail").html(results);
 			//	$("#detail").html("<span class='obvestilo label label-success fade-in'>" + res[i].weight + " " + res[i].unit + "</span>");
+			
+				//draw 3d (pazi ker je tor eferenca in ne kopija)
+				draw3Djs(res);
 			},
 			error: function(err) {
 				$("#detail").html("<span class='obvestilo label label-danger fade-in'>Napaka '" + JSON.parse(err.responseText).userMessage + "'!");
@@ -621,7 +704,7 @@ function master_deatilHeight() {
 	}	
 }
 function master_deatilBP() {
-	sessionId = getSessionId();
+	var sessionId = getSessionId();
 
 	var ehrId = $("#preberiEHRidEHR").val();
 
@@ -635,7 +718,7 @@ function master_deatilBP() {
 	    	success: function (res) {
 				var results = "<table class='table table-striped table-hover'><tr><th>Date</th><th class='text-right'>Blood pressure</th></tr>";
 		        for (var i in res) {
-		            results += "<tr><td>" + res[i].time + "</td><td class='text-right'>" + res[i].systolic + "/" + res[0].diastolic + " " 	+ res[i].unit + "</td>";
+		            results += "<tr><td>" + res[i].time + "</td><td class='text-right'>" + res[i].systolic + "/" + res[i].diastolic + " " 	+ res[i].unit + "</td>";
 		        }
 		        results += "</table>";
 		        $("#detail").html(results);
@@ -649,7 +732,7 @@ function master_deatilBP() {
 	}	
 }
 function master_deatilPulse() {
-	sessionId = getSessionId();
+	var sessionId = getSessionId();
 
 	var ehrId = $("#preberiEHRidEHR").val();
 
@@ -677,7 +760,7 @@ function master_deatilPulse() {
 	}	
 }
 function master_deatilTemperature() {
-	sessionId = getSessionId();
+	var sessionId = getSessionId();
 
 	var ehrId = $("#preberiEHRidEHR").val();
 
@@ -706,33 +789,74 @@ function master_deatilTemperature() {
 }
 //////////////////////////////////////////////
 
-//function za API klic
-/*function klicAPI(APIquery){
-	gapi.client.setApiKey(googleAPIKey);
-	APIquery="bolnica v ljubljani";
-	//APIquery = APIquery.replace(" ", "+");
-	APIquery = APIquery.replace(new RegExp(" ", 'g'), "+");
-/*	var xhr = new XMLHttpRequest();
-	var oauthToken = gapi.auth.getToken();
+// 3D.js
+function draw3Djs(datain){
+	//document.getElementById("djs_holder").removeChild();
+	
+	// Set the dimensions of the canvas / graph
+	var margin = {top: 30, right: 20, bottom: 30, left: 50},
+	    width = 389.333 - margin.left - margin.right,
+	    height = 153.367 - margin.top - margin.bottom;
+	
+	// Parse the date / time
+	var parseDate = d3.time.format("%d-%b-%y").parse;
+	
+	// Set the ranges
+	var x = d3.time.scale().range([0, width]);
+	var y = d3.scale.linear().range([height, 0]);
+	
+	// Define the axes
+	var xAxis = d3.svg.axis().scale(x)
+	    .orient("bottom").ticks(5);
+	
+	var yAxis = d3.svg.axis().scale(y)
+	    .orient("left").ticks(5);
+	
+	// Define the line
+	var valueline = d3.svg.line()
+	    .x(function(d) { return x(d.time); })
+	    .y(function(d) { return y(d.height); });
+	    
+	// Adds the svg canvas
+	var svg = d3.select("#djs_holder")
+	    .append("svg")
+	        .attr("width", width + margin.left + margin.right)
+	        .attr("height", height + margin.top + margin.bottom)
+	    .append("g")
+	        .attr("transform", 
+	              "translate(" + margin.left + "," + margin.top + ")");
+	
+	// Get the data
+	//console.log(datain[0]);
+	for (var i in datain) {
+        // datain[i].time = parseInt(datain[i].time);
+    	/*datain[i].time = datain[i].time.substring(0, 10);
+    	datain[i].time = datain[i].time.replace(new RegExp("-", 'g'), "");*/
+    	datain[i].time = parseInt(i) + 1000;
+    	//delete datain[i].unit;
+    }
+   
+	//console.log(datain[0]);
+	//console.log(datain);
+	
+	
+	// Scale the range of the data
+    x.domain(d3.extent(datain, function(d) { return d.time; }));
+    y.domain([0, d3.max(datain, function(d) { return d.height; })]);
 
-	xhr.open("GET", "https://maps.googleapis.com/maps/api/place/textsearch/xml?query=" + APIquery + "&key=" + googleAPIKey +
-  '?access_token=' + encodeURIComponent(oauthToken.access_token), false);
-	//xhr.setRequestHeader('Authorization', 'Bearer ' + oauthToken.access_token);
-//	xhr.send();
+    // Add the valueline path.
+    svg.append("path")
+        .attr("class", "line")
+        .attr("d", valueline(datain));
 
-	
-	console.log(xhr.status);
-	console.log(xhr.statusText);
-	console.log(xhr.responseText);*/
-	
-	
-/*	var restRequest = gapi.client.request({
-	  'path': '/maps/api/place/textsearch/xml',
-	  'params': {'query': APIquery, 'key': googleAPIKey}
-	});
-	restRequest.then(function(resp) {
-	  console.log(resp.result);
-	}, function(reason) {
-	  console.log('Error: ' + reason.result.error.message);
-	});
-}*/
+    // Add the X Axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+}

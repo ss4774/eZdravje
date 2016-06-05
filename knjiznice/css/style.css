@@ -9,7 +9,7 @@
 
 .patient-outline-image{
     height: 222px;
-    background-image: url("../img/Body Outline.png");
+    /*background-image: url("../img/Body Outline.png");*/
     background-size: 100%;
 }
 
@@ -31,4 +31,21 @@
     display: inline-block;
     /*vertical-align: middle;*/
     line-height: normal;
+}
+#healthcare_map{
+    height: 400px;
+}
+
+/* 3D.js */
+path { 
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
 }

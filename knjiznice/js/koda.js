@@ -408,13 +408,8 @@ function preberiEHROdUporabnika() {
 		    	} else {
 		    		$(".patient-weight").html("<span class='obvestilo label label-success fade-in'>" + "Ni podatkov" + "</span>");
 		    	}
-		    },
-		    error: function() {
-		    	$("#preberiMeritveVitalnihZnakovSporocilo").html("<span class='obvestilo label label-danger fade-in'>Napaka '" + JSON.parse(err.responseText).userMessage + "'!");
-				console.log(JSON.parse(err.responseText).userMessage);
-		    }
-		}, function(){
-		    //callback za zaporedje da se BMI pravilno izracuna
+		    	
+		    	 //callback za zaporedje da se BMI pravilno izracuna
 		    	$.ajax({
         		    url: baseUrl + "/view/" + ehrId + "/" + "height",
         		    type: 'GET',
@@ -435,6 +430,13 @@ function preberiEHROdUporabnika() {
         				console.log(JSON.parse(err.responseText).userMessage);
         		    }
         		});
+		    },
+		    error: function() {
+		    	$("#preberiMeritveVitalnihZnakovSporocilo").html("<span class='obvestilo label label-danger fade-in'>Napaka '" + JSON.parse(err.responseText).userMessage + "'!");
+				console.log(JSON.parse(err.responseText).userMessage);
+		    }
+		}, function(){
+		   
 		});
 		
 		$.ajax({

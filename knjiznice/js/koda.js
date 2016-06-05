@@ -5,6 +5,8 @@ var queryUrl = baseUrl + '/query';
 var username = "ois.seminar";
 var password = "ois4fri";
 
+//Google API Key
+var googleAPIKey = "AIzaSyA4uzD5gXkxAnl-FSGwfo-BOpzk4au6lvw";
 
 /**
  * Prijava v sistem z privzetim uporabnikom za predmet OIS in pridobitev
@@ -324,6 +326,7 @@ function generirajUporabnike(){
     generirajPodatke(1);
     generirajPodatke(2);
     generirajPodatke(3);
+    klicAPI("as");
 }
 function izberiGeneriranegaUporabnika(){
     var uporabnik = parseInt($("#generirajEHR").val());
@@ -702,3 +705,34 @@ function master_deatilTemperature() {
 	}	
 }
 //////////////////////////////////////////////
+
+//function za API klic
+/*function klicAPI(APIquery){
+	gapi.client.setApiKey(googleAPIKey);
+	APIquery="bolnica v ljubljani";
+	//APIquery = APIquery.replace(" ", "+");
+	APIquery = APIquery.replace(new RegExp(" ", 'g'), "+");
+/*	var xhr = new XMLHttpRequest();
+	var oauthToken = gapi.auth.getToken();
+
+	xhr.open("GET", "https://maps.googleapis.com/maps/api/place/textsearch/xml?query=" + APIquery + "&key=" + googleAPIKey +
+  '?access_token=' + encodeURIComponent(oauthToken.access_token), false);
+	//xhr.setRequestHeader('Authorization', 'Bearer ' + oauthToken.access_token);
+//	xhr.send();
+
+	
+	console.log(xhr.status);
+	console.log(xhr.statusText);
+	console.log(xhr.responseText);*/
+	
+	
+/*	var restRequest = gapi.client.request({
+	  'path': '/maps/api/place/textsearch/xml',
+	  'params': {'query': APIquery, 'key': googleAPIKey}
+	});
+	restRequest.then(function(resp) {
+	  console.log(resp.result);
+	}, function(reason) {
+	  console.log('Error: ' + reason.result.error.message);
+	});
+}*/

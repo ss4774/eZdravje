@@ -11,13 +11,24 @@
   <style>
     body {padding-top: 70px;}
   </style>
+    <!-- 3D.js knjiznica --> 
+  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+ <!-- <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4uzD5gXkxAnl-FSGwfo-BOpzk4au6lvw&libraries=places"></script>-->
+
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyA4uzD5gXkxAnl-FSGwfo-BOpzk4au6lvw">
+  var ac = new google.maps.places.Autocomplete(document.getElementById('find_location'));
+  google.maps.event.addListener(ac, 'place_changed', function(){
+  	var place = ac.getPlace();
+  	console.log(place.formatted_address);
+  	console.log(place.url);
+  	console.log(place.geometry.location);
+  });
+</script>
+
+
   <script src="knjiznice/js/jquery-2.2.3.min.js"></script>
   <script src="knjiznice/js/bootstrap.min.js"></script>
   <script src="knjiznice/js/koda.js"></script>
-  
-  <!-- 3D.js knjiznica --> 
-  <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-  
 </head>
 <body>
 
@@ -215,9 +226,178 @@
     
     
     <div class="row_spacer"></div>
-    
-    
-    <div class="row"></div>
+
+
+    <div class="row">
+      <div class="col-md-12">
+        <span class="label label-default">EHR ID</span><input id="find_location" type="text" class="form-control input-mini" placeholder="Enter location">
+  	          <button type="button" class="btn btn-primary btn-xs" onclick="">Search</button><span id="preberiSporociloAC">
+        </span>  
+        <script>
+
+          var margin = {top: 20, right: 80, bottom: 30, left: 50},
+              width = 960 - margin.left - margin.right,
+              height = 500 - margin.top - margin.bottom;
+          
+          var parseDate = d3.time.format("%Y%m%d").parse;
+          
+          var x = d3.time.scale()
+              .range([0, width]);
+          
+          var y = d3.scale.linear()
+              .range([height, 0]);
+          
+          var color = d3.scale.category10();
+          
+          var xAxis = d3.svg.axis()
+              .scale(x)
+              .orient("bottom");
+          
+          var yAxis = d3.svg.axis()
+              .scale(y)
+              .orient("left");
+          
+          var line = d3.svg.line()
+              .interpolate("basis")
+              .x(function(d) { return x(d.date); })
+              .y(function(d) { return y(d.temperature); });
+          
+          var svg = d3.select("body").append("svg")
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          
+          d3.tsv("data.tsv", function(error, data) {
+            if (error) throw error;
+          
+            color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+          
+            data.forEach(function(d) {
+              d.date = parseDate(d.date);
+            });
+          
+            var cities = color.domain().map(function(name) {
+              return {
+                name: name,
+                values: data.map(function(d) {
+                  return {date: d.date, temperature: +d[name]};
+                })
+              };
+            });
+          
+            x.domain(d3.extent(data, function(d) { return d.date; }));
+          
+            y.domain([
+              d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.temperature; }); }),
+              d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.temperature; }); })
+            ]);
+          
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(xAxis);
+          
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+              .append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 6)
+                .attr("dy", ".71em")
+                .style("text-anchor", "end")
+                .text("Temperature (ºF)");
+          
+            var city = svg.selectAll(".city")
+                .data(cities)
+              .enter().append("g")
+                .attr("class", "city");
+          
+            city.append("path")
+                .attr("class", "line")
+                .attr("d", function(d) { return line(d.values); })
+                .style("stroke", function(d) { return color(d.name); });
+          
+            city.append("text")
+                .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+                .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+                .attr("x", 3)
+                .attr("dy", ".35em")
+                .text(function(d) { return d.name; });
+          });
+          
+          </script>
+          <script>
+
+          var n = 3, // number of layers
+              m = 20, // number of samples per layer
+              stack = d3.layout.stack().offset("wiggle"),
+              layers0 = stack(d3.range(n).map(function() { return bumpLayer(m); })),
+              layers1 = stack(d3.range(n).map(function() { return bumpLayer(m); }));
+          
+          //var width = 960,
+              //height = 500;
+          
+          var x = d3.scale.linear()
+              .domain([0, m - 1])
+              .range([0, width]);
+          
+          var y = d3.scale.linear()
+              .domain([0, d3.max(layers0.concat(layers1), function(layer) { return d3.max(layer, function(d) { return d.y0 + d.y; }); })])
+              .range([height, 0]);
+          
+          var color = d3.scale.linear()
+              .range(["#aad", "#556"]);
+          
+          var area = d3.svg.area()
+              .x(function(d) { return x(d.x); })
+              .y0(function(d) { return y(d.y0); })
+              .y1(function(d) { return y(d.y0 + d.y); });
+          
+          var svg = d3.select("body").append("svg")
+              .attr("width", width)
+              .attr("height", height);
+          
+          svg.selectAll("path")
+              .data(layers0)
+            .enter().append("path")
+              .attr("d", area)
+              .style("fill", function() { return color(Math.random()); });
+          
+          function transition() {
+            d3.selectAll("path")
+                .data(function() {
+                  var d = layers1;
+                  layers1 = layers0;
+                  return layers0 = d;
+                })
+              .transition()
+                .duration(2500)
+                .attr("d", area);
+          }
+          
+          // Inspired by Lee Byron's test data generator.
+          function bumpLayer(n) {
+          
+            function bump(a) {
+              var x = 1 / (.1 + Math.random()),
+                  y = 2 * Math.random() - .5,
+                  z = 10 / (.1 + Math.random());
+              for (var i = 0; i < n; i++) {
+                var w = (i / n - y) * z;
+                a[i] += x * Math.exp(-w * w);
+              }
+            }
+          
+            var a = [], i;
+            for (i = 0; i < n; ++i) a[i] = 0;
+            for (i = 0; i < 5; ++i) bump(a);
+            return a.map(function(d, i) { return {x: i, y: Math.max(0, d)}; });
+          }
+          
+          </script>
+      </div>
+    </div>
     
     
   </div>
